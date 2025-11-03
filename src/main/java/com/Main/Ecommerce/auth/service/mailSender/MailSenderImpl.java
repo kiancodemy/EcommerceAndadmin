@@ -1,0 +1,38 @@
+package com.Main.Ecommerce.auth.service.mailSender;
+import com.Main.Ecommerce.dto.request.EmailSenderRequest;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+@Service
+@RequiredArgsConstructor
+public class MailSenderImpl {
+
+    private final JavaMailSender mailSender;
+
+    public void sendMail(EmailSenderRequest emailSenderRequest) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            ClassPathResource resource = new ClassPathResource("templates/OptEmail.html");
+            InputStream is=resource.getInputStream();
+            String a=new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            a = a.replace("{{name}}", emailSenderRequest.email()).replace("{{otp}}", emailSenderRequest.token());
+            helper.setTo(emailSenderRequest.email());
+            helper.setText(a,true);
+
+            mailSender.send(mimeMessage);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
+
+}

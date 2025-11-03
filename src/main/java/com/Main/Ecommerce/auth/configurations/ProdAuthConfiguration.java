@@ -1,5 +1,5 @@
 package com.Main.Ecommerce.auth.configurations;
-import com.Main.Ecommerce.auth.configurations.cors.DevCors;
+import com.Main.Ecommerce.auth.configurations.cors.ProdCors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,26 +11,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-///  Security configuration for development mode//////
-@Configuration
-@Profile("dev")
-@RequiredArgsConstructor
-public class AuthConfiguration {
-    private final DevCors devCors;
-    @Bean
+/// security configuration for production mode//////
 
+
+@Configuration
+@RequiredArgsConstructor
+@Profile("prod")
+public class ProdAuthConfiguration {
+    private final ProdCors prodCors;
+    @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(c->c.configurationSource(devCors.getCorsConfigurationSource())).csrf(AbstractHttpConfigurer::disable).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
+        http.cors(c->c.configurationSource(prodCors.getCorsConfigurationSource())).csrf(AbstractHttpConfigurer::disable).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(requests -> requests.requestMatchers("/auth").permitAll());
         return (SecurityFilterChain)http.build();
     }
-
 
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
 
 }

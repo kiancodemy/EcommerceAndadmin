@@ -1,21 +1,76 @@
 package com.Main.Ecommerce.auth.service.customer;
-
+import com.Main.Ecommerce.dto.request.EmailSenderRequest;
+import com.Main.Ecommerce.dto.request.SignupRequest;
 import com.Main.Ecommerce.auth.model.Customer;
+import com.Main.Ecommerce.auth.repository.ResetPasswordRepository;
+import com.Main.Ecommerce.auth.repository.CustomerRepository;
+import com.Main.Ecommerce.auth.service.mailSender.MailSenderImpl;
+import com.Main.Ecommerce.dto.response.Response;
+import com.Main.Ecommerce.exceptions.exception.UserAlreadyExist;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-public class CustomerServiceImpl implements CustomerService {
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class CustomerServiceImpl implements CustomerService  {
+
+    private final CustomerRepository customerRepository;
+    private final ResetPasswordRepository resetPasswordRepository;
+    private final MailSenderImpl mailSender;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
-    public Customer signup(String email) {
+    @Transactional
+    public  Response signup(SignupRequest SignupRequest) {
+        Optional<Customer> findCustomer= customerRepository.findByEmail(SignupRequest.email());
+
+        if(findCustomer.isEmpty()){
+
+            String encodedPassword = CreateDecodePassword(SignupRequest.password());
+            Customer customer = Customer.builder().password(encodedPassword).name(SignupRequest.email()).build();
+            String token=createSixDigitOtpCode(customer);
+            mailSender.sendMail(EmailSenderRequest.builder().token(token).email(SignupRequest.email()).build());
+            return new Response("رمز یکبار مصرف به آدرس ایمیل شما ارسال شد", null);
+        }
+
+        else if(findCustomer.get().isVerified()){
+            throw new UserAlreadyExist("ایمیمل قبلا ثبت شده است");
+        }
+
+        String token=createSixDigitOtpCode(findCustomer.get());
+        mailSender.sendMail(EmailSenderRequest.builder().token(token).email(SignupRequest.email()).build());
+        return new Response("رمز یکبار مصرف به آدرس ایمیل شما ارسال شد", null);
+    }
+
+
+    @Override
+    public Response login(SignupRequest email) {
         return null;
     }
 
     @Override
-    public Customer login(String email) {
+    public Response submitOtp(String otp) {
         return null;
     }
 
-    @Override
-    public void submitOtp(String email) {
+    public String createSixDigitOtpCode(Customer customer) {
+        SecureRandom random = new SecureRandom();
+        String token = String.valueOf(random.nextInt(900000) + 100000);
+        customer.setToken(token);
+        customer.setExpiryTokenDate(LocalDateTime.now().plusMinutes(2L));
+        customerRepository.save(customer);
+        return token;
+    }
+
+    public String CreateDecodePassword(String password){
+        return passwordEncoder.encode(password);
 
     }
 }
