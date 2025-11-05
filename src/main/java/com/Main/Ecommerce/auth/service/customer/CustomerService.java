@@ -6,6 +6,5 @@ public interface CustomerService {
 
      Response signup(SignupRequest email);
      Response login(SignupRequest email);
-     Response submitOtp(String otp);
-
+     void CheckSignUPOtpCode(String otp, String email);
 }

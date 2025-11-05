@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor
+
 public class MailSenderImpl {
 
     private final JavaMailSender mailSender;
@@ -25,8 +26,8 @@ public class MailSenderImpl {
             String a=new String(is.readAllBytes(), StandardCharsets.UTF_8);
             a = a.replace("{{name}}", emailSenderRequest.email()).replace("{{otp}}", emailSenderRequest.token());
             helper.setTo(emailSenderRequest.email());
+            helper.setSubject("رمز بکبار مصرف");
             helper.setText(a,true);
-
             mailSender.send(mimeMessage);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

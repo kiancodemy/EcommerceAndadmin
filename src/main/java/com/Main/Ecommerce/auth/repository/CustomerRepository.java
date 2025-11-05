@@ -10,8 +10,9 @@ import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    @Query(value = "SELECT * FROM Customer WHERE email= :email ", nativeQuery = true)
-    Optional<Customer> findByEmail(@Param("email") String email);
+
+    Optional<Customer> findByEmail(String email);
+
 
     boolean existsByEmail(String email);
 
