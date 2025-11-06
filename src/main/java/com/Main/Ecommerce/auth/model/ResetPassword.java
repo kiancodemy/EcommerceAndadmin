@@ -1,9 +1,8 @@
 package com.Main.Ecommerce.auth.model;
-
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
-import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -18,7 +17,7 @@ public class ResetPassword {
     private Long id;
 
     private String token;
-    private Date expirationDate;
+    private LocalDateTime expirationDate;
 
     @OneToOne
     @JoinColumn(name="customer-id",referencedColumnName = "id", nullable = false)

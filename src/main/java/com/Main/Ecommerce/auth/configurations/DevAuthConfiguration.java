@@ -23,8 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DevAuthConfiguration {
     private final DevCors devCors;
-    private final CustomAuthenticationProvider customAuthenticationProvider;
-    private final CustomerUserDetailService customerUserDetailService;
+
+
     @Bean
 
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -39,7 +39,7 @@ public class DevAuthConfiguration {
     }
 
     @Bean
-    AuthenticationManager authenticationManager(){
+    AuthenticationManager authenticationManager(CustomAuthenticationProvider customAuthenticationProvider){
         return new ProviderManager(List.of(customAuthenticationProvider));
     }
 

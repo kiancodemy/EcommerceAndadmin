@@ -43,10 +43,6 @@ public class Customer implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-
-
-
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -62,13 +58,13 @@ public class Customer implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole().name())).toList();
+         return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole().name())).toList();
 
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     @Override
@@ -77,13 +73,13 @@ public class Customer implements UserDetails {
     }
 
 
-    // Add role and maintain bidirectional relationship
+    /// Add role and maintain bidirectional relationship
     public void addRole(Role role) {
         this.roles.add(role);
         role.getCustomers().add(this);
     }
 
-    // Remove role and maintain bidirectional relationship
+    /// Remove role and maintain bidirectional relationship
     public void removeRole(Role role) {
         this.roles.remove(role);
         role.getCustomers().remove(this);
