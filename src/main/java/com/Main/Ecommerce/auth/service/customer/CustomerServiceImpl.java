@@ -12,7 +12,6 @@ import com.Main.Ecommerce.exceptions.exception.UserAlreadyExist;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService  {
         if(findCustomer.isEmpty()){
 
             String encodedPassword = CreateDecodePassword(SignupRequest.password());
-             Customer customer = Customer.builder().password(encodedPassword).email(SignupRequest.email()).build();
+            Customer customer = Customer.builder().password(encodedPassword).email(SignupRequest.email()).build();
             String token=createSixDigitOtpCode(customer);
             mailSender.sendMail(SignupRequest.email(), token);
             return new Response("رمز یکبار مصرف به آدرس ایمیل شما ارسال شد", null);
@@ -73,9 +72,9 @@ public class CustomerServiceImpl implements CustomerService  {
         return token;
     }
 
+
     public String CreateDecodePassword(String password){
         return passwordEncoder.encode(password);
-
     }
 
 
@@ -87,12 +86,12 @@ public class CustomerServiceImpl implements CustomerService  {
         /// find customer by email
         Customer findByEmail = customerRepository.findByEmail(otpCheckerRequest.email()).orElseThrow(() -> new RuntimeException("ایمیمل معتبر نیست"));
         if(findByEmail.getExpiryTokenDate().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("token is expired");
+            throw new RuntimeException("اعتبار رمز یکبار مصرف به پایان رسید . دوباره درخواست دهید");
         }
 
         ///  check otp is expired
         else if (!findByEmail.getToken().equals(otpCheckerRequest.otp())){
-            throw new RuntimeException("opt is not valid");
+            throw new RuntimeException("رمز اشتباه است");
         }
 
         /// verify the user and save the data
@@ -108,12 +107,15 @@ public class CustomerServiceImpl implements CustomerService  {
         Customer findCustomerByEmail = customerRepository.findByEmail(signupRequest.email()).
                 orElseThrow(() -> new RuntimeException("ایمیل نا معتبر است"));
 
+        if (!findCustomerByEmail.isVerified()) {
+            throw new UserAlreadyExist("ثبت نام شما هنوز تکمیل نشده.  ابتدا ثبت نام کنید");
+        }
+
 
         /// check if data is valid or not
         Authentication isAuthenticated = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signupRequest.email(), signupRequest.password()));
         if (isAuthenticated.isAuthenticated()) {
-
-            return new Response("ورود با موفقیت انحام شد", null);
+            return new Response("ورود با موفقیت انجام شد", null);
         }
 
         return null;
@@ -147,8 +149,6 @@ public class CustomerServiceImpl implements CustomerService  {
         ResetPassword resetPassword = resetPasswordRepository.findByTokenAndCustomerEmail(otpCheckerRequest.otp(), otpCheckerRequest.email())
                 .orElseThrow(()->new RuntimeException("رمز اشتباه است "));
 
-
-
         /// find expired password
         if(resetPassword.getExpirationDate().isBefore(LocalDateTime.now())){
             throw new RuntimeException("اعتبار توکن تمام شد  دوباره در خواست بدهید");
@@ -160,6 +160,7 @@ public class CustomerServiceImpl implements CustomerService  {
         customerRepository.save(customer);
 
     }
+
 
     @Override
     public void resetPassword(ResetPasswordRequest request) {
@@ -182,11 +183,11 @@ public class CustomerServiceImpl implements CustomerService  {
     @Override
     public String  createResetPasswordToken(Customer customer) {
         Random random = new SecureRandom();
-        int token=random.nextInt(10_000,99999);
-        ResetPassword resetPassword=ResetPassword.builder().customer(customer).token(String.valueOf(token)).expirationDate(LocalDateTime.now().plusMinutes(2L)).build();
+        String token = String.valueOf(random.nextInt(900000) + 100000);
+        ResetPassword resetPassword=ResetPassword.builder().customer(customer).token(token).expirationDate(LocalDateTime.now().plusMinutes(2L)).build();
         customer.setResetPassword(resetPassword);
         resetPasswordRepository.save(resetPassword);
         customerRepository.save(customer);
-        return String.valueOf(token);
+        return token;
     }
 }
