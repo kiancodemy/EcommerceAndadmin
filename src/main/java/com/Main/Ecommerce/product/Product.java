@@ -1,0 +1,57 @@
+package com.Main.Ecommerce.product;
+import com.Main.Ecommerce.category.Category;
+import com.Main.Ecommerce.image.Image;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    private String description;
+
+    @Column(nullable = false)
+    private BigDecimal price;
+
+    @OneToMany(mappedBy = "product",orphanRemoval = true,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    Set<Image> images = new HashSet<>();
+
+
+    @Column(nullable = false)
+    private Integer stock;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="category-id")
+    private Category category;
+
+
+
+
+
+    /// remove image
+    public void removeImage(Image image) {
+        images.remove(image);
+        image.setProduct(null);
+    }
+
+    /// add image
+    public void addImage(Image image) {
+        images.add(image);
+        image.setProduct(this);
+    }
+
+}
