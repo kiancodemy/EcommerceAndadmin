@@ -1,13 +1,14 @@
 package com.Main.Ecommerce.auth.service.customer;
+import com.Main.Ecommerce.auth.configurations.JWT.JwtUtils;
+import com.Main.Ecommerce.auth.dto.request.OtpCheckerRequest;
+import com.Main.Ecommerce.auth.dto.request.ResetPasswordRequest;
+import com.Main.Ecommerce.auth.dto.request.SignupRequest;
+import com.Main.Ecommerce.auth.dto.response.Response;
 import com.Main.Ecommerce.auth.model.ResetPassword;
 import com.Main.Ecommerce.auth.repository.ResetPasswordRepository;
-import com.Main.Ecommerce.dto.request.OtpCheckerRequest;
-import com.Main.Ecommerce.dto.request.ResetPasswordRequest;
-import com.Main.Ecommerce.dto.request.SignupRequest;
 import com.Main.Ecommerce.auth.model.Customer;
 import com.Main.Ecommerce.auth.repository.CustomerRepository;
 import com.Main.Ecommerce.auth.service.mailSender.MailSenderImpl;
-import com.Main.Ecommerce.dto.response.Response;
 import com.Main.Ecommerce.exceptions.exception.UserAlreadyExist;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,6 +35,7 @@ public class CustomerServiceImpl implements CustomerService  {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final ResetPasswordRepository resetPasswordRepository;
+    private final JwtUtils jwtUtils;
 
 
     @Override
@@ -112,12 +116,12 @@ public class CustomerServiceImpl implements CustomerService  {
         }
 
 
-        /// check if data is valid or not
+        /// check if data is valid or not and if yes creat and send the jwt token
         Authentication isAuthenticated = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signupRequest.email(), signupRequest.password()));
         if (isAuthenticated.isAuthenticated()) {
-            return new Response("ورود با موفقیت انجام شد", null);
+            String token=CreateJwt(isAuthenticated);
+            return new Response("ورود با موفقیت انجام شد", token);
         }
-
         return null;
     }
 
@@ -189,5 +193,18 @@ public class CustomerServiceImpl implements CustomerService  {
         resetPasswordRepository.save(resetPassword);
         customerRepository.save(customer);
         return token;
+    }
+
+    public String CreateJwt(Authentication authentication) {
+        UserDetails customer=(UserDetails) authentication.getPrincipal();
+        Map<String,Object> claims = new HashMap<>();
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority) // get ROLE_USER, ROLE_ADMIN, etc.
+                .toList();
+        claims.put("roles",roles);
+
+        claims.put("email", customer.getUsername());
+
+        return jwtUtils.generateToken(claims);
     }
 }

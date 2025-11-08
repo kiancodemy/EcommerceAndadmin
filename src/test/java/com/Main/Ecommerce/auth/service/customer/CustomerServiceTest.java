@@ -1,14 +1,15 @@
 package com.Main.Ecommerce.auth.service.customer;
+import com.Main.Ecommerce.auth.configurations.JWT.JwtUtils;
+import com.Main.Ecommerce.auth.dto.request.OtpCheckerRequest;
+import com.Main.Ecommerce.auth.dto.request.ResetPasswordRequest;
+import com.Main.Ecommerce.auth.dto.request.SignupRequest;
+import com.Main.Ecommerce.auth.dto.response.Response;
 import com.Main.Ecommerce.auth.model.Customer;
 import com.Main.Ecommerce.auth.model.ResetPassword;
 import com.Main.Ecommerce.auth.repository.CustomerRepository;
 import com.Main.Ecommerce.auth.repository.ResetPasswordRepository;
 import com.Main.Ecommerce.auth.service.mailSender.MailSenderImpl;
-import com.Main.Ecommerce.dto.request.OtpCheckerRequest;
-import com.Main.Ecommerce.dto.request.ResetPasswordRequest;
-import com.Main.Ecommerce.dto.request.SignupRequest;
 import static org.assertj.core.api.Assertions.*;
-import com.Main.Ecommerce.dto.response.Response;
 import com.Main.Ecommerce.exceptions.exception.UserAlreadyExist;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -52,6 +52,9 @@ class CustomerServiceTest {
 
     @MockitoBean
     private ResetPasswordRepository resetPasswordRepository;
+
+    @MockitoBean
+    private JwtUtils jwtUtils;
 
 
     @Autowired
@@ -187,6 +190,8 @@ class CustomerServiceTest {
         Response response=customerServiceImpl.login(signupRequest);
         assertThat(response).isNotNull();
         assertThat(response.message()).isEqualTo("ورود با موفقیت انجام شد");
+        assertThat(response.data()).isNotNull();
+
     }
 
     @Test

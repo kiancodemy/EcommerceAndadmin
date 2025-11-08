@@ -23,7 +23,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails customUserDetails = customerUserDetailService.loadUserByUsername((String) authentication.getPrincipal());
         String password = authentication.getCredentials().toString();
         if (!passwordEncoder.matches(password, customUserDetails.getPassword())) {
-            throw new BadCredentialsException("Incorrect password");
+            throw new BadCredentialsException("پسورد اشتباه بود");
 
         }
         return  new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());

@@ -38,14 +38,4 @@ class CustomerRepositoryTest {
 
     }
 
-    @Test
-    void it_Should_ExistsByEmail() {
-
-        ///given
-        /// when
-
-        /// then
-
-
-    }
 }

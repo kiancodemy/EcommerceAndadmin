@@ -1,53 +1,50 @@
 package com.Main.Ecommerce.auth.configurations.JWT;
-import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.userdetails.UserDetails;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
-
+import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 @Service
 public class JwtUtils {
-    private final String secretKey = "your-very-long-secret-key"; // or load from application.properties
-    private final long jwtExpiration = 1000 * 60 * 60; // 1 hour
 
-    // Generate token
-    public String generateToken(UserDetails userDetails) {
+
+    private final int jwtExpiration = 1000 * 60 * 60;
+    private final String secretKey = "Base64EncodefdfdfdffdfdSecretHere";
+    private final Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
+
+
+
+    //// Generate token
+    public String generateToken(Map<String, Object> claims) {
+        // 1 hour
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setClaims(claims)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+                .setExpiration(new Date(System.currentTimeMillis() + this.jwtExpiration))
+                .signWith(key).compact();
     }
 
-    // Validate token
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+
+
+
+    /// Extract body information from jwts toekn
+    public Claims extractUsername(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build().parseClaimsJws(token).getBody();
     }
 
-    // Extract username/email from token
-    public String extractUsername(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
-
-    // Check expiration
-    private boolean isTokenExpired(String token) {
+    /// Check expiration
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
+    /// get expiration date
     private Date extractExpiration(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration();
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
     }
 
 }

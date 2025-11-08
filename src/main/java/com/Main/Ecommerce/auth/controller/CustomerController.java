@@ -1,9 +1,10 @@
 package com.Main.Ecommerce.auth.controller;
+import com.Main.Ecommerce.auth.dto.request.OtpCheckerRequest;
+import com.Main.Ecommerce.auth.dto.request.ResetPasswordRequest;
+import com.Main.Ecommerce.auth.dto.request.SignupRequest;
+import com.Main.Ecommerce.auth.dto.response.Response;
 import com.Main.Ecommerce.auth.service.customer.CustomerServiceImpl;
-import com.Main.Ecommerce.dto.request.OtpCheckerRequest;
-import com.Main.Ecommerce.dto.request.ResetPasswordRequest;
-import com.Main.Ecommerce.dto.request.SignupRequest;
-import com.Main.Ecommerce.dto.response.Response;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

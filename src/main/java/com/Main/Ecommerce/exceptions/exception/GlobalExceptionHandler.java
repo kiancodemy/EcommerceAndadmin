@@ -1,6 +1,7 @@
 package com.Main.Ecommerce.exceptions.exception;
 
-import com.Main.Ecommerce.dto.response.Response;
+
+import com.Main.Ecommerce.auth.dto.response.Response;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

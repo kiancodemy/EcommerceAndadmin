@@ -1,9 +1,10 @@
 package com.Main.Ecommerce.auth.service.customer;
+import com.Main.Ecommerce.auth.dto.request.OtpCheckerRequest;
+import com.Main.Ecommerce.auth.dto.request.ResetPasswordRequest;
+import com.Main.Ecommerce.auth.dto.request.SignupRequest;
+import com.Main.Ecommerce.auth.dto.response.Response;
 import com.Main.Ecommerce.auth.model.Customer;
-import com.Main.Ecommerce.dto.request.OtpCheckerRequest;
-import com.Main.Ecommerce.dto.request.ResetPasswordRequest;
-import com.Main.Ecommerce.dto.request.SignupRequest;
-import com.Main.Ecommerce.dto.response.Response;
+
 
 public interface CustomerService {
 

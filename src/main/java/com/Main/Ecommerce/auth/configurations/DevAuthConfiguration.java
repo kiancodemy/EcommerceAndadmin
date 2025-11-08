@@ -1,5 +1,8 @@
 package com.Main.Ecommerce.auth.configurations;
+import com.Main.Ecommerce.auth.authExceptions.AccessDeniedHandlerException;
+import com.Main.Ecommerce.auth.authExceptions.AuthEntrypointHandler;
 import com.Main.Ecommerce.auth.configurations.cors.DevCors;
+import com.Main.Ecommerce.auth.configurations.filters.JwtGenerationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.List;
 
@@ -24,11 +28,9 @@ import java.util.List;
 public class DevAuthConfiguration {
     private final DevCors devCors;
 
-
     @Bean
-
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(c->c.configurationSource(devCors.getCorsConfigurationSource())).csrf(AbstractHttpConfigurer::disable).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
+    SecurityFilterChain defaultSecurityFilterChain(JwtGenerationFilter jwtGenerationFilter,HttpSecurity http, AccessDeniedHandlerException accessDeniedHandlerException, AuthEntrypointHandler authEntrypointHandler) throws Exception {
+        http.addFilterBefore(jwtGenerationFilter,UsernamePasswordAuthenticationFilter.class).exceptionHandling(c->c.accessDeniedHandler(accessDeniedHandlerException).authenticationEntryPoint(authEntrypointHandler)).cors(c->c.configurationSource(devCors.getCorsConfigurationSource())).csrf(AbstractHttpConfigurer::disable).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(requests -> requests.anyRequest().authenticated());
         return (SecurityFilterChain)http.build();
     }
 
@@ -42,8 +44,4 @@ public class DevAuthConfiguration {
     AuthenticationManager authenticationManager(CustomAuthenticationProvider customAuthenticationProvider){
         return new ProviderManager(List.of(customAuthenticationProvider));
     }
-
-
-
-
 }

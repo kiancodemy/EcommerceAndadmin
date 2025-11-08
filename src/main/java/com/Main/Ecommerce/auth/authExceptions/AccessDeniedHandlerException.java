@@ -1,0 +1,24 @@
+package com.Main.Ecommerce.auth.authExceptions;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+@Component
+
+public class AccessDeniedHandlerException implements AccessDeniedHandler {
+
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String json = "{\"message\": \"اجازه ورود ندارید\", \"data\": null}";
+        response.getWriter().write(json);
+    }
+}
