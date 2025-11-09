@@ -3,6 +3,7 @@ import com.Main.Ecommerce.category.Category;
 import com.Main.Ecommerce.image.Image;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -33,6 +35,9 @@ public class Product {
 
     @Column(nullable = false)
     private Integer stock;
+
+    @Column(nullable = false)
+    private Boolean isActive = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="category-id")
