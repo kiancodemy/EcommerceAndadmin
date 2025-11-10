@@ -1,11 +1,9 @@
 package com.Main.Ecommerce.product.service;
-
 import com.Main.Ecommerce.category.Category;
 import com.Main.Ecommerce.category.CategoryRepository;
 import com.Main.Ecommerce.product.Product;
 import com.Main.Ecommerce.product.ProductRepository;
 import com.Main.Ecommerce.product.dto.ProductRequest;
-
 import org.junit.jupiter.api.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -18,15 +16,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-
-
-
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 
 @SpringBootTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -72,17 +65,6 @@ class ProductServiceImplTest {
 
         /// when + then
         assertThatThrownBy(() -> productService.addProduct(productRequest)).isInstanceOf(RuntimeException.class).hasMessage("دسته بندی موجود نیست");
-    }
-
-    @Test
-    void it_Should_UpdateProduct() {
-
-        ///given
-        /// when
-
-        /// then
-
-
     }
 
     @Test

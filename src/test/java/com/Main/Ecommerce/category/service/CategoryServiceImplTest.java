@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -64,5 +66,18 @@ class CategoryServiceImplTest {
         Long capturedId = id.getValue();
         assertThat(capturedId).isNotNull();
         assertThat(capturedId).isEqualTo(2L);
+    }
+
+    @Test
+    void it_Should_AllCategories() {
+
+        ///given
+        given(categoryRepository.findAll()).willReturn(List.of(new Category()));
+
+        /// when
+        List<Category> all = categoryServiceImpl.allCategories();
+
+        /// then
+        assertThat(all.size()).isGreaterThan(0);
     }
 }

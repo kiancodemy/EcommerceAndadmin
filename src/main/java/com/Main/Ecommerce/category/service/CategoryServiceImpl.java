@@ -4,6 +4,8 @@ import com.Main.Ecommerce.category.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -15,9 +17,13 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(findCategory);
     }
 
-
     @Override
     public void deleteCategory(Long id) {
         categoryRepository.findById(id).ifPresent((c) -> categoryRepository.deleteById(c.getId()));
+    }
+
+    @Override
+    public List<Category> allCategories() {
+        return categoryRepository.findAll();
     }
 }

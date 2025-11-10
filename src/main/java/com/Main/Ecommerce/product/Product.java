@@ -1,5 +1,6 @@
 package com.Main.Ecommerce.product;
 import com.Main.Ecommerce.category.Category;
+import com.Main.Ecommerce.comment.Comment;
 import com.Main.Ecommerce.image.Image;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,10 +44,27 @@ public class Product {
     @JoinColumn(name="category-id")
     private Category category;
 
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Set<Comment> comments = new HashSet<>();
 
 
 
 
+
+    ///////**** add and remove methods  ******///////
+
+    //// add comment
+    public void addComment(Comment comment){
+        comments.add(comment);
+        comment.setProduct(this);
+    }
+
+
+    /// remove comment
+    public void removeComment(Comment comment){
+        comments.remove(comment);
+        comment.setProduct(null);
+    }
     /// remove image
     public void removeImage(Image image) {
         images.remove(image);
@@ -58,5 +76,4 @@ public class Product {
         images.add(image);
         image.setProduct(this);
     }
-
 }
