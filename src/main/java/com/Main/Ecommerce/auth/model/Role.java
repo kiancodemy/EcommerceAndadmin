@@ -32,7 +32,7 @@ public class Role {
     @Builder.Default
     private Set<Customer> customers = new HashSet<>();
 
-    // Automatically set creation date
+    /// Automatically set creation date
     @PrePersist
     protected void onCreate() {
         this.created = new Date();

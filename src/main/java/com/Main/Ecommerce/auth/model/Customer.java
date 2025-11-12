@@ -1,4 +1,5 @@
 package com.Main.Ecommerce.auth.model;
+import com.Main.Ecommerce.customer.enums.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -24,14 +25,16 @@ public class Customer implements UserDetails {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+
     @Builder.Default
     private boolean isVerified=false;
 
     private String token;
 
     private LocalDateTime expiryTokenDate;
-
-
 
     @NotBlank(message = "email should not be null")
     @Email(message = "email is not valid")
@@ -49,6 +52,7 @@ public class Customer implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
