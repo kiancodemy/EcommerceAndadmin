@@ -1,7 +1,8 @@
-package com.Main.Ecommerce.exceptions.exception;
+package com.Main.Ecommerce.exceptions;
 
 
 import com.Main.Ecommerce.auth.dto.response.Response;
+import com.Main.Ecommerce.exceptions.exception.UserAlreadyExist;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

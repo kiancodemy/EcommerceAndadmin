@@ -1,7 +1,6 @@
 package com.Main.Ecommerce.auth.model;
 
 import com.Main.Ecommerce.auth.enums.EnumRole;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

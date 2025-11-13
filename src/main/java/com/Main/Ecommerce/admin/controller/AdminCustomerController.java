@@ -3,7 +3,6 @@ package com.Main.Ecommerce.admin.controller;
 import com.Main.Ecommerce.auth.dto.response.Response;
 import com.Main.Ecommerce.auth.model.Customer;
 import com.Main.Ecommerce.customer.dto.CustomerResponseDto;
-import com.Main.Ecommerce.customer.dto.CustomerUpdateRequest;
 import com.Main.Ecommerce.customer.service.CustomerUpdateImpl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
