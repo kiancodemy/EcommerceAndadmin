@@ -30,7 +30,7 @@ public class DevAuthConfiguration {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(JwtGenerationFilter jwtGenerationFilter,HttpSecurity http, AccessDeniedHandlerException accessDeniedHandlerException, AuthEntrypointHandler authEntrypointHandler) throws Exception {
-        http.addFilterBefore(jwtGenerationFilter,UsernamePasswordAuthenticationFilter.class).exceptionHandling(c->c.accessDeniedHandler(accessDeniedHandlerException).authenticationEntryPoint(authEntrypointHandler)).cors(c->c.configurationSource(devCors.getCorsConfigurationSource())).csrf(AbstractHttpConfigurer::disable).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(requests -> requests.anyRequest().authenticated());
+        http.addFilterBefore(jwtGenerationFilter,UsernamePasswordAuthenticationFilter.class).exceptionHandling(c->c.accessDeniedHandler(accessDeniedHandlerException).authenticationEntryPoint(authEntrypointHandler)).cors(c->c.configurationSource(devCors.getCorsConfigurationSource())).csrf(AbstractHttpConfigurer::disable).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
         return (SecurityFilterChain)http.build();
     }
 

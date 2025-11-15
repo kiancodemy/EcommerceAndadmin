@@ -11,7 +11,9 @@ public interface CustomerService {
      Response signup(SignupRequest email);
      Response login(SignupRequest email);
 
-     String createSixDigitOtpCode(Customer customer);
+    void SignupOtpResender(String email);
+
+    String createSixDigitOtpCode(Customer customer);
 
      void CheckSignUPOtpCode(OtpCheckerRequest otpCheckerRequest);
 

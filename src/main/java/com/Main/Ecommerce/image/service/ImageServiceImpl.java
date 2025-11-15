@@ -7,8 +7,7 @@ import com.Main.Ecommerce.product.Product;
 import com.Main.Ecommerce.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamSource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,9 +19,7 @@ public class ImageServiceImpl implements ImageService {
     private final FileStorageService fileStorageService;
     private final ProductRepository productRepository;
 
-    @Value("${image.upload.url}")
-    private String uploadedUrl;
-
+    /// tested
     @Override
     public void deleteImage(Long id) {
         Image image =imageRepository.findById(id).orElseThrow(()->new RuntimeException("عکس موجود نست"));
@@ -32,6 +29,7 @@ public class ImageServiceImpl implements ImageService {
         log.info("image deleted with id {}", image.getId());
     }
 
+    /// tested
     @Override
     public Image addImage(Long productId, MultipartFile file) {
         Product product=productRepository.findById(productId).orElseThrow(()->new RuntimeException("محصول یافت نشد"));
@@ -41,8 +39,9 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.save(image);
     }
 
+
     @Override
-    public InputStreamSource downloadImage(String downloadedUrl) {
+    public Resource downloadImage(String downloadedUrl) {
         return fileStorageService.downLoadImage(downloadedUrl);
     }
 }

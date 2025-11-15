@@ -6,12 +6,15 @@ import com.Main.Ecommerce.auth.dto.response.Response;
 import com.Main.Ecommerce.auth.service.customer.CustomerServiceImpl;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("api/customer")
 @RestController
+@Validated
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -37,6 +40,14 @@ public class CustomerController {
         customerServiceImpl.CheckSignUPOtpCode(otpCheckerRequest);
         return ResponseEntity.ok().body(new Response("رمز یکبار مصرف معتبر بود", null));
 
+    }
+
+
+    ///  SENDING SIGNUP OTP WHEN IT IS EXPIRED /////
+    @PostMapping("/signupOtpResender/{email}")
+    public ResponseEntity<Response> SignupOtpResender(@PathVariable @Email(message = "ایمیل نامعتبر است") String email ) {
+        customerServiceImpl.SignupOtpResender(email);
+        return ResponseEntity.ok().body(new Response("رمز یکبارارسال شد", null));
     }
 
     ////****** ResetPassword (forget password) section ********* /////

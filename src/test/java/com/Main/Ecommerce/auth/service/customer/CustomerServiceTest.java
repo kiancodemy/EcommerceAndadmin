@@ -98,7 +98,25 @@ class CustomerServiceTest {
         assertThat(response.data()).isNull();
     }
 
+    @Test
+    void it_should_SignUp_Otp_Resender(){
 
+        /// given
+        ArgumentCaptor<String> email = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> token = ArgumentCaptor.forClass(String.class);
+        given(customerRepository.findByEmail(anyString())).willReturn(Optional.of(Customer.builder().isVerified(true).build()));
+
+        /// when
+        customerServiceImpl.SignupOtpResender("kian@gmail.com");
+
+        /// then
+        then(mailSender).should().sendMail(email.capture(), token.capture());
+        String capturedEmail = email.getValue();
+        String capturedToken = token.getValue();
+        assertThat(capturedToken).hasSize(6);
+        assertThat(capturedEmail).isEqualTo("kian@gmail.com");
+
+    }
     @Test
     void it_Should_create_SixDigit_OtpCode() {
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -15,6 +16,7 @@ public class MailSenderImpl {
 
     private final JavaMailSender mailSender;
 
+    @Async("emailExecutor")
     public void sendMail(String email, String token) {
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();

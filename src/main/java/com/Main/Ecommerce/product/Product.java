@@ -48,9 +48,6 @@ public class Product {
     private Set<Comment> comments = new HashSet<>();
 
 
-
-
-
     ///////**** add and remove methods  ******///////
 
     //// add comment

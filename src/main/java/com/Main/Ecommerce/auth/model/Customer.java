@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class Customer implements UserDetails {
 
     @Id
@@ -27,7 +27,6 @@ public class Customer implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
 
     @Builder.Default
     private boolean isVerified=false;
@@ -60,6 +59,8 @@ public class Customer implements UserDetails {
     private ResetPassword resetPassword;
 
 
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
          return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole().name())).toList();
@@ -75,7 +76,6 @@ public class Customer implements UserDetails {
     public String getUsername() {
         return email;
     }
-
 
     /// Add role and maintain bidirectional relationship
     public void addRole(Role role) {

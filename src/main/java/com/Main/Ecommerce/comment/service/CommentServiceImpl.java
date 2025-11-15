@@ -15,6 +15,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final ProductRepository productRepository;
 
+    //tested
     @Override
     public Comment publishComment(Long id) {
         Comment findComment=commentRepository.findById(id).orElseThrow(()->new RuntimeException("موجود نیست"));
@@ -23,6 +24,7 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
+    //tested
     @Override
     public Comment createComment(Long id ,String email, CreateRequest createRequest) {
         Product findProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("موجود نیست"));
@@ -31,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
+    //tested
     @Override
     public Comment unpublishComment(Long id) {
         Comment findComment=commentRepository.findById(id).orElseThrow(()->new RuntimeException("موجود نیست"));
@@ -39,6 +42,7 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
+    //tested
     @Override
     public void deleteComment(Long id) {
         Comment findComment=commentRepository.findById(id).orElseThrow(()->new RuntimeException("موجود نیست"));
@@ -46,6 +50,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(id);
     }
 
+    //tested
     @Override
     public List<Comment> getAllComments() {
         return commentRepository.findAll();

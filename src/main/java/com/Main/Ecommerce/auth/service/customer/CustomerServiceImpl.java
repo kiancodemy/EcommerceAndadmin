@@ -66,6 +66,18 @@ public class CustomerServiceImpl implements CustomerService  {
         return new Response("رمز یکبار مصرف به آدرس ایمیل شما ارسال شد", null);
     }
 
+    ///  tested
+    @Override
+    public void SignupOtpResender(String email){
+
+        Customer findCustomer= customerRepository.findByEmail(email).orElseThrow(()->new RuntimeException("ایمیل موجود نیست"));
+        if(findCustomer.isVerified()){
+            throw new UserAlreadyExist("ایمیمل قبلن ثبت شده است");
+        }
+        String token=createSixDigitOtpCode(findCustomer);
+        mailSender.sendMail(email, token);
+    }
+
     @Override
     public String createSixDigitOtpCode(Customer customer) {
         SecureRandom random = new SecureRandom();
@@ -80,8 +92,6 @@ public class CustomerServiceImpl implements CustomerService  {
     public String CreateDecodePassword(String password){
         return passwordEncoder.encode(password);
     }
-
-
 
     ///  send opt as email in order to verify the new user email
     @Override
@@ -101,7 +111,6 @@ public class CustomerServiceImpl implements CustomerService  {
         /// verify the user and save the data
         findByEmail.setVerified(true);
         customerRepository.save(findByEmail);
-
     }
 
     @Override

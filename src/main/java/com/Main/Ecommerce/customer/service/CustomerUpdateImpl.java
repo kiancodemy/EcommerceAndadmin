@@ -47,6 +47,5 @@ public class CustomerUpdateImpl implements CustomerUpdateService {
 
         findCustomer.getRoles().remove(findRole);
         return customerRepository.save(findCustomer);
-
     }
 }

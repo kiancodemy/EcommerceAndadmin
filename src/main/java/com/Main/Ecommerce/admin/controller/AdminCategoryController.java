@@ -21,8 +21,9 @@ public class AdminCategoryController {
 
     @PostMapping("/addCategory/{name}")
     public ResponseEntity<Response> addCategory(@PathVariable("name") String name) {
-        categoryService.addCategory(name);
-        return ResponseEntity.ok().body(new Response("اضافه شد",null));
+        Category category=categoryService.addCategory(name);
+        CategoryDto categoryDto=modelMapper.map(category,CategoryDto.class);
+        return ResponseEntity.ok().body(new Response("اضافه شد",categoryDto));
     }
 
     @DeleteMapping("/addCategory/{id}")

@@ -10,12 +10,9 @@ import java.util.Map;
 @Service
 public class JwtUtils {
 
-
     private final int jwtExpiration = 1000 * 60 * 60;
     private final String secretKey = "Base64EncodefdfdfdffdfdSecretHere";
     private final Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
-
-
 
     //// Generate token
     public String generateToken(Map<String, Object> claims) {
@@ -26,9 +23,6 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + this.jwtExpiration))
                 .signWith(key).compact();
     }
-
-
-
 
     /// Extract body information from jwts toekn
     public Claims extractUsername(String token) {
@@ -46,5 +40,4 @@ public class JwtUtils {
     private Date extractExpiration(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
     }
-
 }

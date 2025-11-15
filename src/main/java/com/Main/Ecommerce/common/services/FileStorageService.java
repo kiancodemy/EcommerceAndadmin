@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.InputStreamSource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,7 +47,7 @@ public class FileStorageService {
         }}
 
 
-    public InputStreamSource downLoadImage(String imageName) {
+    public Resource downLoadImage(String imageName) {
         var url=new File(StorageDirectory+File.separator, imageName);
         if(!url.exists()){
             throw new RuntimeException("فایل موجود نیست");

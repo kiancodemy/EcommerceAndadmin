@@ -11,17 +11,20 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
+    //tested
     @Override
-    public void addCategory(String name) {
+    public Category addCategory(String name) {
         Category findCategory = categoryRepository.findByName(name).orElseGet(() -> Category.builder().name(name).build());
-        categoryRepository.save(findCategory);
+        return categoryRepository.save(findCategory);
     }
 
+    //tested
     @Override
     public void deleteCategory(Long id) {
         categoryRepository.findById(id).ifPresent((c) -> categoryRepository.deleteById(c.getId()));
     }
 
+    //tested
     @Override
     public List<Category> allCategories() {
         return categoryRepository.findAll();

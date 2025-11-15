@@ -16,6 +16,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
+    /// tested
     @Override
     public void addProduct(ProductRequest productRequest) {
 
@@ -28,6 +29,8 @@ public class ProductServiceImpl implements ProductService {
         log.info("added successfully");
 
     }
+
+    /// tested
     @Override
     public Product updateProduct(Long id, ProductRequest productRequest) {
         Category findCategoryByID = categoryRepository.findById(productRequest.categoryId()).orElseThrow(() -> new RuntimeException("ذسته بندی موجود نیست"));
@@ -40,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    /// tested
     @Override
     public void deActivateProduct(Long id) {
         Product findProduct=productRepository.findById(id).orElseThrow(() -> new RuntimeException("محصول موجود نیست"));
@@ -49,6 +53,7 @@ public class ProductServiceImpl implements ProductService {
         log.info("Deactivating product with id: {}", id);
     }
 
+    /// tested
     @Override
     public Product createOrUpdateProduct(Product product, ProductRequest productRequest, Category category) {
         product.setName(productRequest.name());
