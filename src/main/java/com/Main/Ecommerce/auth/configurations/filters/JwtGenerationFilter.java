@@ -28,7 +28,7 @@ public class JwtGenerationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String jwt = request.getHeader("jwt"); /// or "Authorization" if you prefer "Bearer <token>"
+        String jwt = request.getHeader("Authorization"); /// or "Authorization" if you prefer "Bearer <token>"
 
         if (jwt != null && !jwt.isEmpty()) {
             if (!jwtUtils.isTokenExpired(jwt)) { /// check if token is NOT expired

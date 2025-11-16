@@ -79,11 +79,11 @@ class CustomerUpdateImplTest {
 
         ///given
         ArgumentCaptor<Customer> captor=ArgumentCaptor.forClass(Customer.class);
-        given(customerRepository.findByEmail(anyString())).willReturn(Optional.of(customer));
+        given(customerRepository.findById(anyLong())).willReturn(Optional.of(customer));
         given(roleRepository.findById(anyLong())).willReturn(Optional.of(role));
 
         /// when
-        customerUpdate.addRoleToCustomer("a", 2L);
+        customerUpdate.addRoleToCustomer(2L, 2L);
 
         /// then
         then(customerRepository).should().save(captor.capture());
@@ -96,15 +96,35 @@ class CustomerUpdateImplTest {
 
         ///given
         ArgumentCaptor<Customer> captor=ArgumentCaptor.forClass(Customer.class);
-        given(customerRepository.findByEmail(anyString())).willReturn(Optional.of(Customer.builder().roles(new HashSet<>(Set.of(role))).build()));
+        given(customerRepository.findById(anyLong())).willReturn(Optional.of(Customer.builder().roles(new HashSet<>(Set.of(role))).build()));
         given(roleRepository.findById(anyLong())).willReturn(Optional.of(role));
 
         /// when
-        customerUpdate.removeRoleFromCustomer("a", 2L);
+        customerUpdate.removeRoleFromCustomer(2L, 2L);
 
         /// then
         then(customerRepository).should().save(captor.capture());
         Customer customer1=captor.getValue();
         assertThat(customer1.getRoles()).hasSize(0);
+    }
+
+    @Test
+    public void it_Should_createRole() {
+
+        ///given
+        ArgumentCaptor<Role> roleCaptor=ArgumentCaptor.forClass(Role.class);
+        given(roleRepository.findById(anyLong())).willThrow(RuntimeException.class);
+
+        /// /when
+        customerUpdate.createRole(EnumRole.ADMIN);
+
+        /// then
+        then(roleRepository).should().save(roleCaptor.capture());
+        Role role=roleCaptor.getValue();
+        assertThat(role.getRole()).isEqualTo(EnumRole.ADMIN);
+
+
+
+
     }
 }

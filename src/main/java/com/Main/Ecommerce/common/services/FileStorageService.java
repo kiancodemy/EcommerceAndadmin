@@ -20,7 +20,7 @@ import java.util.UUID;
 public class FileStorageService {
 
     @Value("${image.upload.url}")
-    private static String StorageDirectory;
+    private String StorageDirectory;
 
     public String saveFile(MultipartFile file) {
 
@@ -33,17 +33,23 @@ public class FileStorageService {
         }
 
         String FinalName= UUID.randomUUID() + file.getOriginalFilename();
-        var fileTarget=new File(StorageDirectory+File.separator,FinalName);
+        File fileTarget=new File(StorageDirectory,FinalName);
         if(!Objects.equals(fileTarget.getParent(),StorageDirectory)){
-            throw new SecurityException("خطا رخ داده");
-
+            throw new RuntimeException("خطای ذاخلی");
         }
+
+        if (!fileTarget.getParentFile().exists()) {
+            boolean isCreated=fileTarget.getParentFile().mkdirs();
+            if (!isCreated) {
+                throw new  RuntimeException("فایل مادر ایجاد نشد");
+            }}
+
         try {
             Files.copy(file.getInputStream(), fileTarget.toPath(), StandardCopyOption.REPLACE_EXISTING);
             return FinalName;
         } catch (IOException e) {
             log.info("IOException during copying file");
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("فایل ذخیره نشد!!!! دوباره نلاش کنید");
         }}
 
 

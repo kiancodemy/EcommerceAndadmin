@@ -15,7 +15,8 @@ public class DevCors {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("*"));   // allow all origins
         configuration.setAllowedMethods(List.of("*"));   // allow all HTTP methods
-        configuration.setAllowedHeaders(List.of("Jwt"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
         configuration.setExposedHeaders(List.of());
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -24,6 +24,15 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.findById(id).ifPresent((c) -> categoryRepository.deleteById(c.getId()));
     }
 
+    ///// tested
+    @Override
+    public Category updateCategories(String updatedName, Long id) {
+        Category findCategory= categoryRepository.findById(id).orElseThrow(()->new RuntimeException("موجود نیست"));
+        findCategory.setName(updatedName);
+        return categoryRepository.save(findCategory);
+
+    }
+
     //tested
     @Override
     public List<Category> allCategories() {

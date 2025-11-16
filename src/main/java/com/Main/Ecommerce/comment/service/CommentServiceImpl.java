@@ -4,6 +4,7 @@ import com.Main.Ecommerce.comment.CommentRepository;
 import com.Main.Ecommerce.comment.dto.CreateRequest;
 import com.Main.Ecommerce.product.Product;
 import com.Main.Ecommerce.product.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -15,7 +16,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final ProductRepository productRepository;
 
-    //tested
+    ///tested //admin
     @Override
     public Comment publishComment(Long id) {
         Comment findComment=commentRepository.findById(id).orElseThrow(()->new RuntimeException("موجود نیست"));
@@ -24,8 +25,9 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
-    //tested
+    /// tested ///user
     @Override
+    @Transactional
     public Comment createComment(Long id ,String email, CreateRequest createRequest) {
         Product findProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("موجود نیست"));
         Comment comment = Comment.builder().writer(email).text(createRequest.text()).product(findProduct).build();
@@ -33,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
-    //tested
+    ///tested  ////admin
     @Override
     public Comment unpublishComment(Long id) {
         Comment findComment=commentRepository.findById(id).orElseThrow(()->new RuntimeException("موجود نیست"));
@@ -42,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
-    //tested
+    /// tested ////admin
     @Override
     public void deleteComment(Long id) {
         Comment findComment=commentRepository.findById(id).orElseThrow(()->new RuntimeException("موجود نیست"));
@@ -50,9 +52,10 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(id);
     }
 
-    //tested
+    /// tested  ///admin
     @Override
     public List<Comment> getAllComments() {
         return commentRepository.findAll();
     }
+
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/category")
-@PreAuthorize("hasRole('ADMIN')")
+///@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminCategoryController {
     private final CategoryServiceImpl categoryService;
@@ -26,7 +26,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok().body(new Response("اضافه شد",categoryDto));
     }
 
-    @DeleteMapping("/addCategory/{id}")
+    @DeleteMapping("/deleteCategory/{id}")
     public ResponseEntity<Response> addCategory(@PathVariable("id") Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok().body(new Response("حذف شد",null));
@@ -37,5 +37,12 @@ public class AdminCategoryController {
         List<Category> allCategories=categoryService.allCategories();
         List<CategoryDto> allCategoryDto =allCategories.stream().map(category -> modelMapper.map(category,CategoryDto.class)).toList();
         return ResponseEntity.ok().body(new Response("با موفقیت انجام شد", allCategoryDto));
+    }
+
+    @PutMapping("/updateCategory/{id}/{updatedName}")
+    public ResponseEntity<Response> updateCategory(@PathVariable("updatedName") String updatedName,@PathVariable("id") Long id) {
+        Category updatedCategories = categoryService.updateCategories(updatedName, id);
+        CategoryDto CategoryDto =modelMapper.map(updatedCategories,CategoryDto.class);
+        return ResponseEntity.ok().body(new Response("به روز رسانی با موفقیت انجام شد", CategoryDto));
     }
 }

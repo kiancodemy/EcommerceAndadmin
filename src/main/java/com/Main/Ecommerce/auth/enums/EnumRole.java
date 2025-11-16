@@ -1,9 +1,9 @@
 package com.Main.Ecommerce.auth.enums;
 
-public enum EnumRole {
+public enum EnumRole  {
     ADMIN,
     USER,
     ADMINISTRATOR,
-    MANAGER,
+    MANAGER;
 
 }

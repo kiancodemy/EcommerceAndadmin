@@ -80,4 +80,21 @@ class CategoryServiceImplTest {
         /// then
         assertThat(all.size()).isGreaterThan(0);
     }
+
+    @Test
+    void it_Should_updateCategories() {
+
+        ///given
+        ArgumentCaptor<Category> categoryArgumentCaptor = ArgumentCaptor.forClass(Category.class);
+        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(Category.builder().name("cloths").build()));
+
+        /// when
+        categoryServiceImpl.updateCategories("shoes", 2L);
+
+        /// then
+        then(categoryRepository).should().save(categoryArgumentCaptor.capture());
+        Category category1 = categoryArgumentCaptor.getValue();
+        assertThat(category1).isNotNull();
+        assertThat(category1.getName()).isEqualTo("shoes");
+    }
 }

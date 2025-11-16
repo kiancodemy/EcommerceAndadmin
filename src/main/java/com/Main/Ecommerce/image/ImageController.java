@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 public class ImageController {
+
     private final ImageServiceImpl imageService;
     @GetMapping("/downloadImage/{id}")
     public ResponseEntity<Resource> downloadImage(@PathVariable String id){

@@ -11,6 +11,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -19,7 +21,7 @@ public class ImageServiceImpl implements ImageService {
     private final FileStorageService fileStorageService;
     private final ProductRepository productRepository;
 
-    /// tested
+    /// tested  ///admin+////user
     @Override
     public void deleteImage(Long id) {
         Image image =imageRepository.findById(id).orElseThrow(()->new RuntimeException("عکس موجود نست"));
@@ -29,19 +31,28 @@ public class ImageServiceImpl implements ImageService {
         log.info("image deleted with id {}", image.getId());
     }
 
-    /// tested
+    /// tested ///admin
     @Override
     public Image addImage(Long productId, MultipartFile file) {
-        Product product=productRepository.findById(productId).orElseThrow(()->new RuntimeException("محصول یافت نشد"));
-        String finalPath=fileStorageService.saveFile(file);
-        String downloadedPath="/api/v1/image/downloadImage/"+finalPath;
-        Image image = Image.builder().downloadedUrl(downloadedPath).product(product).build();
-        return imageRepository.save(image);
+
+           Product product=productRepository.findById(productId).orElseThrow(()->new RuntimeException("محصول یافت نشد"));
+           String finalPath=fileStorageService.saveFile(file);
+           log.info("path is {}", finalPath);
+           String downloadedPath="/api/v1/image/downloadImage/"+finalPath;
+           Image image = Image.builder().downloadedUrl(downloadedPath).product(product).build();
+           return imageRepository.save(image);
     }
 
 
+    /// // user
     @Override
     public Resource downloadImage(String downloadedUrl) {
         return fileStorageService.downLoadImage(downloadedUrl);
     }
+
+    /// // user@Override
+    public List<Image> ALLImage() {
+        return imageRepository.findAll();
+    }
+
 }

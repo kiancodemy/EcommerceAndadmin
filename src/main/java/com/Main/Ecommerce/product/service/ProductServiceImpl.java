@@ -4,13 +4,17 @@ import com.Main.Ecommerce.category.CategoryRepository;
 import com.Main.Ecommerce.product.Product;
 import com.Main.Ecommerce.product.ProductRepository;
 import com.Main.Ecommerce.product.dto.ProductRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
+
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
@@ -64,4 +68,9 @@ public class ProductServiceImpl implements ProductService {
         product.setIsActive(productRequest.isActive());
         return productRepository.save(product);
     }
-}
+
+    @Override
+    public List<Product> allProducts(){
+        System.out.println("🔥 Service Called");
+        return productRepository.findAllWithImagesCommentsCategory();
+}}

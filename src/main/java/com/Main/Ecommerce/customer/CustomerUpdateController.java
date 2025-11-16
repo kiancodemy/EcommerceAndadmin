@@ -9,11 +9,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/customer")
@@ -22,6 +23,7 @@ public class CustomerUpdateController {
     private final CustomerUpdateImpl customerUpdate;
     private final ModelMapper modelMapper;
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/update")
     public ResponseEntity<Response> update(Authentication authentication, @Valid @RequestBody CustomerUpdateRequest request) {
         Customer customer =(Customer) authentication.getPrincipal();
@@ -30,4 +32,14 @@ public class CustomerUpdateController {
         CustomerResponseDto updatedCustomerDto = modelMapper.map(updateCustomer,CustomerResponseDto.class);
         return ResponseEntity.ok().body(new Response("با موفقیت به روز رسانی شد",updatedCustomerDto));
     }
+
+    @GetMapping("/allCustomers")
+    public ResponseEntity<Response> allCustomers(){
+
+        List<Customer> allCustomer=customerUpdate.allCustomers();
+        List<CustomerResponseDto> allCustomerDto=allCustomer.stream().map(c->modelMapper.map(c,CustomerResponseDto.class)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(new Response("با موفقیت انجام شد",allCustomerDto));
+    }
+
+
 }
