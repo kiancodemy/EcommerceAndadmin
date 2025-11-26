@@ -39,7 +39,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok().body(new Response("با موفقیت انجام شد", allCategoryDto));
     }
 
-    @PutMapping("/updateCategory/{id}/{updatedName}")
+    @PutMapping("/updat eCategory/{id}/{updatedName}")
     public ResponseEntity<Response> updateCategory(@PathVariable("updatedName") String updatedName,@PathVariable("id") Long id) {
         Category updatedCategories = categoryService.updateCategories(updatedName, id);
         CategoryDto CategoryDto =modelMapper.map(updatedCategories,CategoryDto.class);

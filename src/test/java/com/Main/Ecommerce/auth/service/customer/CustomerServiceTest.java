@@ -21,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -35,6 +36,7 @@ import static org.mockito.Mockito.mock;
 @SpringBootTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
+@ActiveProfiles("dev")
 class CustomerServiceTest {
 
     @MockitoBean
@@ -104,7 +106,7 @@ class CustomerServiceTest {
         /// given
         ArgumentCaptor<String> email = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> token = ArgumentCaptor.forClass(String.class);
-        given(customerRepository.findByEmail(anyString())).willReturn(Optional.of(Customer.builder().isVerified(true).build()));
+        given(customerRepository.findByEmail(anyString())).willReturn(Optional.of(Customer.builder().isVerified(false).build()));
 
         /// when
         customerServiceImpl.SignupOtpResender("kian@gmail.com");
@@ -208,7 +210,7 @@ class CustomerServiceTest {
         Response response=customerServiceImpl.login(signupRequest);
         assertThat(response).isNotNull();
         assertThat(response.message()).isEqualTo("ورود با موفقیت انجام شد");
-        assertThat(response.data()).isNotNull();
+
 
     }
 

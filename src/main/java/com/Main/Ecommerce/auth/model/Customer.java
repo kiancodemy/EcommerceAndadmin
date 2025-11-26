@@ -58,6 +58,13 @@ public class Customer implements UserDetails {
     @OneToOne(mappedBy = "customer", orphanRemoval = true, cascade = CascadeType.ALL)
     private ResetPassword resetPassword;
 
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+    }
+
 
 
 

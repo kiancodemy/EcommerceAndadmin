@@ -8,7 +8,7 @@ import java.util.Set;
 
 @NoArgsConstructor
 @Data
-public class CustomerResponseDto {
+public class CustomerDto {
 
     private Long id;
 

@@ -6,8 +6,13 @@ import com.Main.Ecommerce.auth.model.Role;
 import com.Main.Ecommerce.auth.repository.CustomerRepository;
 import com.Main.Ecommerce.auth.repository.RoleRepository;
 import com.Main.Ecommerce.customer.dto.CustomerUpdateRequest;
+import com.Main.Ecommerce.customer.filter.CustomerSearchFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +23,7 @@ import java.util.List;
 public class CustomerUpdateImpl implements CustomerUpdateService {
     private final CustomerRepository customerRepository;
     private final RoleRepository roleRepository;
+    private final CustomerSearchFilter customerSearchFilter;
 
     /// tested ///user
     @Override
@@ -64,8 +70,12 @@ public class CustomerUpdateImpl implements CustomerUpdateService {
         return customerRepository.save(findCustomer);
     }
 
+
     @Override
-    public List<Customer> allCustomers() {
-        return customerRepository.findAll();
+    public Page<Customer> allCustomers(int page, int size, String name) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        Pageable pageable= PageRequest.of(page, size, sort);
+        return customerRepository.findAll(customerSearchFilter.searchCustomerByName(name),pageable);
     }
 }

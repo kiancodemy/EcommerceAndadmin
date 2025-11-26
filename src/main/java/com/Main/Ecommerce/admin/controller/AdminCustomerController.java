@@ -5,12 +5,13 @@ import com.Main.Ecommerce.auth.dto.response.RoleDto;
 import com.Main.Ecommerce.auth.enums.EnumRole;
 import com.Main.Ecommerce.auth.model.Customer;
 import com.Main.Ecommerce.auth.model.Role;
-import com.Main.Ecommerce.customer.dto.CustomerResponseDto;
+import com.Main.Ecommerce.customer.dto.CustomerDto;
+import com.Main.Ecommerce.customer.dto.CustomerPageDto;
 import com.Main.Ecommerce.customer.service.CustomerUpdateImpl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -23,11 +24,11 @@ public class AdminCustomerController {
     private final CustomerUpdateImpl customerUpdate;
     private final ModelMapper modelMapper;
 
-    @PutMapping("/addRole/{customerId}/{id}")
-    public ResponseEntity<Response> addRoleToCustomer(@PathVariable("customerId") Long customerId,@PathVariable("id") Long id){
+    @PutMapping("/addRole/{customerId}/{roleId}")
+    public ResponseEntity<Response> addRoleToCustomer(@PathVariable("customerId") Long customerId,@PathVariable("roleId") Long roleId){
 
-        Customer updatedCustomer=customerUpdate.addRoleToCustomer(customerId,id);
-        CustomerResponseDto updatedCustomerDto=modelMapper.map(updatedCustomer,CustomerResponseDto.class);
+        Customer updatedCustomer=customerUpdate.addRoleToCustomer(customerId,roleId);
+        CustomerDto updatedCustomerDto=modelMapper.map(updatedCustomer, CustomerDto.class);
 
         return ResponseEntity.ok().body(new Response("با موفقیت اضافه شد",updatedCustomerDto));
     }
@@ -45,9 +46,20 @@ public class AdminCustomerController {
     public ResponseEntity<Response> removeRoleToCustomer(@PathVariable("customerId") Long customerId,@PathVariable("id") Long id){
 
         Customer updatedCustomer=customerUpdate.removeRoleFromCustomer(customerId,id);
-        CustomerResponseDto updatedCustomerDto=modelMapper.map(updatedCustomer,CustomerResponseDto.class);
+        CustomerDto updatedCustomerDto=modelMapper.map(updatedCustomer, CustomerDto.class);
 
         return ResponseEntity.ok().body(new Response("با موفقیت حذف شد",updatedCustomerDto));
+    }
+
+    @GetMapping("/allCustomers")
+    public ResponseEntity<Response> allCustomers(   @RequestParam(defaultValue = "0", required = false) int page,
+
+                                                    @RequestParam(defaultValue = "5", required = false) int size,
+                                                    @RequestParam( required = false) String name){
+
+        Page<Customer> allCustomer=customerUpdate.allCustomers(page,size,name);
+        CustomerPageDto customerPageDto=modelMapper.map(allCustomer, CustomerPageDto.class);
+        return ResponseEntity.ok().body(new Response("با موفقیت انجام شد",customerPageDto));
     }
 
 }

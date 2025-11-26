@@ -1,15 +1,20 @@
 package com.Main.Ecommerce.product.service;
 import com.Main.Ecommerce.category.Category;
 import com.Main.Ecommerce.category.CategoryRepository;
+import com.Main.Ecommerce.product.filter.ProductSearchFilter;
 import com.Main.Ecommerce.product.Product;
 import com.Main.Ecommerce.product.ProductRepository;
 import com.Main.Ecommerce.product.dto.ProductRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Service
 @Slf4j
@@ -19,6 +24,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductSearchFilter productSearchFilter;
 
     /// tested
     @Override
@@ -69,8 +75,21 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(product);
     }
 
+
+    /// user////not tested
     @Override
-    public List<Product> allProducts(){
-        System.out.println("🔥 Service Called");
-        return productRepository.findAllWithImagesCommentsCategory();
-}}
+    public Page<Product> allProducts(int page, Sort.Direction direction, int size, String search, BigDecimal min, BigDecimal max, Long categoryId) {
+        Pageable pageable= PageRequest.of(page,size,Sort.by(direction,"price"));
+        Specification<Product> productSpecification = productSearchFilter.productSearchFilter(search, min, max, categoryId);
+        return productRepository.findAll(productSpecification,pageable);
+    }
+
+
+    @Override
+    /// tested //user
+    public Product findProductById(Long id){
+        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("محصول موجود نیست"));
+    }
+
+
+}

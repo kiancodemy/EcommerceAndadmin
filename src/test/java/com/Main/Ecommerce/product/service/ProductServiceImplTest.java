@@ -101,7 +101,17 @@ class ProductServiceImplTest {
             assertThat(productRequest.getPrice()).isEqualTo(BigDecimal.valueOf(1000));
             assertThat(productRequest.getStock()).isEqualTo(5);
             assertThat(productRequest.getIsActive()).isTrue();});
+    }
 
+    @Test
+    void it_Should_find_By_Id(){
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(Product.builder().id(2L).name("iphone").build()));
+        Product find=productService.findProductById(2L);
+        assertThat(find).isNotNull();
+        assertThat(find).satisfies(productRequest -> {
+            assertThat(productRequest.getName()).isEqualTo("iphone");
+            assertThat(productRequest.getId()).isEqualTo(2L);
+        });
 
     }
 }

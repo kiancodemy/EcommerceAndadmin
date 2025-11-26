@@ -21,5 +21,5 @@ public class ProductDto {
     private Integer stock;
     private Boolean isActive;
     private CategoryDto category;
-    private Set<CommentDto> comments = new HashSet<>();
+
 }
