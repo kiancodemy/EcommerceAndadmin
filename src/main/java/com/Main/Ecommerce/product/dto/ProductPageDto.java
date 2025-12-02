@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ProductPageDto {
-    List<ProductDto> content;
+    List<AllProductDto> content;
     long totalElements;
     int totalPages;
     int page;

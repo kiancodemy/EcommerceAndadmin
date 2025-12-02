@@ -8,6 +8,7 @@ import com.Main.Ecommerce.auth.model.Role;
 import com.Main.Ecommerce.customer.dto.CustomerDto;
 import com.Main.Ecommerce.customer.dto.CustomerPageDto;
 import com.Main.Ecommerce.customer.service.CustomerUpdateImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/customer")
+@Tag(name = "admin-customer-handler", description = "APIs for customer by admin")
 ////@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminCustomerController {

@@ -4,6 +4,7 @@ import com.Main.Ecommerce.auth.dto.response.Response;
 import com.Main.Ecommerce.image.Image;
 import com.Main.Ecommerce.image.dto.ImageDto;
 import com.Main.Ecommerce.image.service.ImageServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@Tag(name = "admin-Image-handler", description = "APIs for images by admin")
 @RequestMapping("/api/admin/image")
 ////@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor

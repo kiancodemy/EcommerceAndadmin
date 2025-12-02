@@ -3,6 +3,7 @@ import com.Main.Ecommerce.auth.dto.response.Response;
 import com.Main.Ecommerce.category.Category;
 import com.Main.Ecommerce.category.dto.CategoryDto;
 import com.Main.Ecommerce.category.service.CategoryServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/category")
+@Tag(name = "admin-Category-handler", description = "APIs for categories by admin")
 ///@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminCategoryController {

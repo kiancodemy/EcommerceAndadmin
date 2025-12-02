@@ -3,6 +3,7 @@ import com.Main.Ecommerce.auth.dto.response.Response;
 import com.Main.Ecommerce.comment.Comment;
 import com.Main.Ecommerce.comment.dto.CommentDto;
 import com.Main.Ecommerce.comment.service.CommentServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin/comment")
+@Tag(name = "admin-Comment-handler", description = "APIs for comment by admin")
 /////@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminCommentController {

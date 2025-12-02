@@ -78,9 +78,9 @@ public class ProductServiceImpl implements ProductService {
 
     /// user////not tested
     @Override
-    public Page<Product> allProducts(int page, Sort.Direction direction, int size, String search, BigDecimal min, BigDecimal max, Long categoryId) {
+    public Page<Product> allProducts(String stock,int page, Sort.Direction direction, int size, String search, BigDecimal min, BigDecimal max, Long categoryId) {
         Pageable pageable= PageRequest.of(page,size,Sort.by(direction,"price"));
-        Specification<Product> productSpecification = productSearchFilter.productSearchFilter(search, min, max, categoryId);
+        Specification<Product> productSpecification = productSearchFilter.productSearchFilter(stock,search, min, max, categoryId);
         return productRepository.findAll(productSpecification,pageable);
     }
 

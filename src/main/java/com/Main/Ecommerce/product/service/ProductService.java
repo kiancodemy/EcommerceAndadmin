@@ -1,4 +1,5 @@
 package com.Main.Ecommerce.product.service;
+
 import com.Main.Ecommerce.category.Category;
 import com.Main.Ecommerce.product.Product;
 import com.Main.Ecommerce.product.dto.ProductRequest;
@@ -9,14 +10,17 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface ProductService {
-    void addProduct(ProductRequest  productRequest);
-    Product updateProduct(Long id , ProductRequest  productRequest);
+    void addProduct(ProductRequest productRequest);
+
+    Product updateProduct(Long id, ProductRequest productRequest);
+
     void deActivateProduct(Long id);
 
     Product createOrUpdateProduct(Product product, ProductRequest productRequest, Category category);
 
-    Page<Product> allProducts(int page, Sort.Direction direction,
+    Page<Product> allProducts(String stock, int page, Sort.Direction direction,
                               int size,
+
                               String search,
                               BigDecimal min,
                               BigDecimal max,

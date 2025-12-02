@@ -7,6 +7,7 @@ import com.Main.Ecommerce.product.dto.ProductDto;
 import com.Main.Ecommerce.product.dto.ProductPageDto;
 import com.Main.Ecommerce.product.dto.ProductRequest;
 import com.Main.Ecommerce.product.service.ProductServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
+@Tag(name = "admin-Product-handler", description = "APIs for products by admin")
 @RequestMapping("/api/admin/product")
 ////@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor

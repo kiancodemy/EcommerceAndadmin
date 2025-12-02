@@ -3,7 +3,6 @@ package com.Main.Ecommerce.configurations;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 @Configuration
 public class GlobalConfiguration {
 
@@ -11,4 +10,5 @@ public class GlobalConfiguration {
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
+
 }
